@@ -5,7 +5,7 @@ node_modules
 .DS_Store
 dist
 .env
-public/bundle.js
+# public/bundle.js
 public/bundle.css
 public/service-worker.js
 public/service-worker.js.map
