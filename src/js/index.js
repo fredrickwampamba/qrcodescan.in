@@ -110,13 +110,33 @@ window.addEventListener('DOMContentLoaded', () => {
       copiedText = result;
       textBoxEle.value = result;
       textBoxEle.select();
-      scanningEle.style.display = 'none';
-      appScanningEle.style.display = 'none';
-      if (isURL(result)) {
-        dialogOpenBtnElement.style.display = 'inline-block';
-      }
-      dialogElement.classList.remove('app__dialog--hide');
-      dialogOverlayElement.classList.remove('app__dialog--hide');
+      // scanningEle.style.display = 'none';
+      // appScanningEle.style.display = 'none';
+      // var url = "https://sys.culchrpass.com/attendance_api/";
+      // if (isURL(result)) {
+      //   dialogOpenBtnElement.style.display = 'inline-block';
+      // }
+
+      console.log(result);
+
+      // Show processing request activity
+
+      $.ajax({
+        url : url,
+        cache : false,
+        data : {id : result},
+        success : function(res){
+          // Hide the showing of the request process
+          // return of json data only
+
+        },error : function(err){
+          // Hide the showing of the request process
+          // notify that something went wrong for a limited time, like 5 seconds
+          
+        }
+      });
+      // dialogElement.classList.remove('app__dialog--hide');
+      // dialogOverlayElement.classList.remove('app__dialog--hide');
     }, forSelectedPhotos);
   }
 
