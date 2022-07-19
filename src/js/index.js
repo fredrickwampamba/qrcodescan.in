@@ -106,38 +106,67 @@ window.addEventListener('DOMContentLoaded', () => {
       appScanningEle.style.display = 'block';
     }
 
+    var xhr = null;
+
     QRReader.scan((result) => {
-      copiedText = result;
-      textBoxEle.value = result;
-      textBoxEle.select();
+      // copiedText = result;
+      // textBoxEle.value = result;
+      // textBoxEle.select();
       // scanningEle.style.display = 'none';
       // appScanningEle.style.display = 'none';
-      // var url = "https://sys.culchrpass.com/attendance_api/";
+
+      // console.log(result)
+
+      if(xhr){
+        xhr.abort();
+      }
+
+      xhr = $.ajax({
+          url : "https://sys.culchrpass.com/attendance_api/",
+          cache : false,
+          data : {id : result},
+          method : "POST",
+          success : function(res){
+            // console.log(res.msg);
+            // Hide the showing of the request process
+            // return of json data only
+            
+            remove_iframe();
+  
+            Swal.fire({
+              title: 'Error!',
+              text: res.msg,
+              icon: 'Success',
+              confirmButtonText: 'Okay'
+            });
+  
+          },error : function(err){
+            // console.log(err.responseJSON.errorMsg);
+            // Hide the showing of the request process
+            // notify that something went wrong for a limited time, like 5 seconds
+            remove_iframe();
+  
+            Swal.fire({
+              title: 'Error!',
+              text: "Something went wrong",
+              icon: 'error',
+              confirmButtonText: 'Close'
+            });
+            
+          }
+        });
+
       // if (isURL(result)) {
       //   dialogOpenBtnElement.style.display = 'inline-block';
       // }
-
-      console.log(result);
-
-      // Show processing request activity
-
-      $.ajax({
-        url : url,
-        cache : false,
-        data : {id : result},
-        success : function(res){
-          // Hide the showing of the request process
-          // return of json data only
-
-        },error : function(err){
-          // Hide the showing of the request process
-          // notify that something went wrong for a limited time, like 5 seconds
-          
-        }
-      });
       // dialogElement.classList.remove('app__dialog--hide');
       // dialogOverlayElement.classList.remove('app__dialog--hide');
     }, forSelectedPhotos);
+  }
+
+  function remove_iframe(){
+    $("#frame").remove();
+    $("#camera").val("");
   }
 
   //Hide dialog
@@ -157,6 +186,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function selectFromPhoto() {
     //Creating the camera element
+    if ($("#camera").length > 0) {
+      $("#camera").remove();
+    }
     var camera = document.createElement('input');
     camera.setAttribute('type', 'file');
     camera.setAttribute('capture', 'camera');
